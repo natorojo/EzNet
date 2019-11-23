@@ -141,6 +141,7 @@ class FFNN:
 			loss = np.sum(-targets*np.log(y_hat))/m
 			dA = self._fwd_trace[-1]['A'] - targets
 
+		# > 1 because the first "layer" is the input layer
 		while len(self._fwd_trace) > 1:
 			
 			fwd_data = self._fwd_trace.pop()

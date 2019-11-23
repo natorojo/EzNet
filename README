@@ -1,8 +1,10 @@
-ALL RIGHTS RESERVED
+A simple Class for Feed Forward Neural Networks. 
 
-WORK IN PROGRESS
+Back propagation is fully vectorized matrix form.
+If you are curious about the derivation of these equations see the here:
 
+https://rojasinate.com/#myWork
 
-
-
-
+Notes:
+There is an experimental feature (rswitch). It pretty much acts like drop out but currently
+I haven't worked out the kinks. 

@@ -1,3 +1,8 @@
+#extend the api to allow one to pass in the layers array
+this allows it to be used as an API for a front end web framework
+if we allow arc units then we can easily make deep simplicity interface
+with an autograd system like jax
+
 A. Ng Said go deep
 Well you've got to start shallow first
 Here's NN class from scratch using numpy :)
