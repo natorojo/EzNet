@@ -121,7 +121,7 @@ class FFNN:
 			if you're curious abou the derivation see 
 			https://rojasinate.com/documents/backprop.pdf
 
-			TODO: use nestorov momentum
+			TODO: add more advanced optimization like Adam
 		"""
 		m = targets.shape[1]
 		#initialize back prop
