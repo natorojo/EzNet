@@ -97,10 +97,7 @@ class FFNN:
 				#as an identity
 				A = Z
 
-			#we might not want an activation
-			#eg softmax or to test is linear
-			#networks do better than reduced equivalent
-			#hmmm........
+			#we might not want an activation (eg softmax)
 			#note if no activation we treat it as identity map
 			trace_item['A'] = A
 			fwd_prop = A
