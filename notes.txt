@@ -9,8 +9,6 @@ Here's NN class from scratch using numpy :)
 Don't worry there's way more cool things in this github
 
 TODOS:
-- Cross entropy back prop
-- softmax back prop
 - different inits for different activations
 	- https://towardsdatascience.com/weight-initialization-in-neural-networks-a-journey-from-the-basics-to-kaiming-954fb9b47c79
 
@@ -25,5 +23,5 @@ checkpoint 2: nov 9
 		- how to implement rswitch regularization (if it even means anything )
 			- this will need training mode
 			- and inference mode 
-		- Nestorov adam
+		- Adam
 		- Stochastic gradient

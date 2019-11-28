@@ -13,7 +13,7 @@ def normalize(X,ax):
 class FFNN:
 	def __init__(self,opts):
 		"""
-			A simple FFNN class that defaults with Xavier Init
+			A simple FFNN class
 			uses numpy at its core
 		"""
 		self._input_size = opts['input_size']
@@ -42,14 +42,13 @@ class FFNN:
 		if self._layers:
 			prev_h = self._layers[-1]['W'].shape[0]
 
-		#Xavier init
-		#W = (np.random.rand(h,prev_h)-0.5)*math.sqrt(6/(h+prev_h))
+		#initializations
 		if activation is 'relu':
 			#kaiming
 			W = np.random.randn(h,prev_h)*math.sqrt(2/prev_h)
 		else:
-			#almost xavier
-			W = 2*(np.random.rand(h,prev_h)-0.5)*math.sqrt(3/prev_h)
+			#Xavier init
+			W = np.random.randn(h,prev_h)*math.sqrt(2/(h+prev_h))
 		b = np.zeros((h,1))
 
 		self._layers.append({
@@ -141,7 +140,7 @@ class FFNN:
 			loss = np.sum(-targets*np.log(y_hat))/m
 			dA = self._fwd_trace[-1]['A'] - targets
 
-		# > 1 because the first "layer" is the input layer
+		#perform back prop
 		while len(self._fwd_trace) > 1:
 			
 			fwd_data = self._fwd_trace.pop()
@@ -151,17 +150,22 @@ class FFNN:
 			# "layer"
 			layer = self._layers[len(self._fwd_trace)-1]
 			if layer['type'] == 'FC':
+				#dZ needs different handling for each activation
 				if layer['a'] == 'relu' or layer['a'] == 'rswitch':
 					dZ = dA*fwd_data['S']
+
+				elif layer['a'] == 'sigmoid':
+					dZ = dA*(fwd_data['A']*(1-fwd_data['A']))
+
 				elif layer['a'] is None:
 					dZ = dA
 
+				#once dZ is handled update dA
 				dA = layer['W'].T@dZ
 
-			#soft max has no params
-			if layer['type']!='softmax':
-				layer['W'] -= lr*(1/m)*dZ@np.transpose(self._fwd_trace[-1]['A'])
-				layer['b'] -= lr*(1/m)*np.sum(dZ,axis=1,keepdims=True)
+			#update the weights
+			layer['W'] -= lr*(1/m)*dZ@np.transpose(self._fwd_trace[-1]['A'])
+			layer['b'] -= lr*(1/m)*np.sum(dZ,axis=1,keepdims=True)
 		
 		return loss
 
@@ -181,9 +185,13 @@ class FFNN:
 		self._fwd_trace = []
 		return y_hat
 
-def Y(X):
-	return 4*X**3 - X**2 + 2*X +3 - 0.5*X**4
+"""---------------------------------------------
 
+Do a basic test of the class on the iris dataset
+
+---------------------------------------------"""
+
+#set up train set and val set
 batch_size = 150
 num_features = 4
 #random permutation
@@ -207,39 +215,32 @@ X_val = X[:,split:]
 y_val = y[split:]
 print(X_val.shape,y_val.shape)
 
+
+#build a very basic model using method chaining
 model = FFNN({
 	'input_size':num_features,
 	'loss':'SMCE'
 })\
 .FC(4)\
 .FC(4)\
-.FC(4)\
 .FC(3)\
 .FC(num_classes,None)
 
+#training loop
 lr = 0.005
 EPOCHS = 20000
 loss_trace = []
 for epoch in range(EPOCHS):
 	loss = model.Fit(X_train,y_train,lr)
 	loss_trace.append(loss)
-	if epoch % 100 ==0:
+	if epoch % 1000 ==0:
 		print('epoch',epoch,loss)
 
+#check on validation set
 y_hat = np.argmax(model.predict(X_val),axis=0)
 print(y_val[:5])
 print(y_hat[:5])
 accuracy = np.sum(y_val==y_hat)/y_val.shape[0]
 print('accuracy:',accuracy)
-"""
-model_size = 50
-X_model = (np.random.rand(num_features,model_size)-0.5)*2
-y_hat = model.predict(X_test)
-y_test = np.sum(Y(X_test),axis = 0,keepdims=True)
-
-plt.plot([i for i in range(1,test_size+1)],y_hat[0,:])
-plt.plot([i for i in range(1,test_size+1)],y_test[0,:])
-plt.show()
-"""
 plt.plot(loss_trace)
 plt.show()
