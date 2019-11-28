@@ -10,4 +10,4 @@ There is an experimental feature (rswitch). It pretty much acts like drop out bu
 I haven't worked out the kinks. 
 
 Future Projects that will extend this (though in different repositories):
-A front end tool to design interesting 
+A front end tool to design interesting networks with arbitrary graph structure in a simple drag and drop web interface. (Currently designing the front end UI)
