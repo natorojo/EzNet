@@ -4,10 +4,3 @@ Back propagation is fully vectorized matrix form.
 If you are curious about the derivation of these equations see the here:
 
 https://rojasinate.com/#myWork
-
-Notes:
-There is an experimental feature (rswitch). It pretty much acts like drop out but currently
-I haven't worked out the kinks. 
-
-Future Projects that will extend this (though in different repositories):
-A front end tool to design interesting networks with arbitrary graph structure in a simple drag and drop web interface. (Currently designing the front end UI)
